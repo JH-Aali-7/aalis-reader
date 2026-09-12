@@ -8,7 +8,7 @@ chapter with AI when you are online.
 Built for the **Pak Angels Generative & Agentic AI Hackathon (Cohort 11)**.
 
 <p align="center">
-  <a href="https://github.com/JH-Aali-7/aalis-reader/releases/latest">
+  <a href="https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-arm64.apk">
     <b>Download the APK</b>
   </a>
   &nbsp;·&nbsp;
@@ -136,15 +136,15 @@ One reader that stays useful with the aeroplane mode on.
 
 ## Install
 
-1. Download `AaliReader.apk` from the [latest release](../../releases/latest).
+1. Download **[AaliReader-v1.8-arm64.apk](https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-arm64.apk)** (49 MB).
 2. On the phone, allow installing from unknown sources when asked.
 3. Open the app, grant storage access, then copy any book into `Aali Reader/Books` or import from the
    library screen.
 4. Optional: Settings → AI key, paste a free Google Gemini key from
    [aistudio.google.com](https://aistudio.google.com/app/apikey) to switch AI summaries on.
 
-If the main APK refuses to install on an older or unusual phone, use the `universal` APK in the same
-release.
+If the main APK refuses to install on an older or unusual phone, use the
+[universal APK](https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-universal.apk) instead.
 
 ## Build from source
 
@@ -167,6 +167,7 @@ app/src/main/assets/dict.db.gz            offline dictionary, unpacked on first 
 app/src/main/assets/reader.js|.css        the reading engine injected into the WebView
 docs/PRD.md                               product requirements document
 docs/index.html                           project page published with GitHub Pages
+release/                                  signed APKs you can install directly
 ```
 
 ## Data and privacy

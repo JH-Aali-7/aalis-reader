@@ -240,6 +240,6 @@ export, backup and restore.
 | --- | --- |
 | Code | https://github.com/JH-Aali-7/aalis-reader |
 | Download and project page | https://jh-aali-7.github.io/aalis-reader/ |
-| APK release | https://github.com/JH-Aali-7/aalis-reader/releases/latest |
+| APK download | https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-arm64.apk |
 | Presentation slides | [add link] |
 | Presentation video | [add link] |
