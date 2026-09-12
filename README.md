@@ -134,6 +134,21 @@ One reader that stays useful with the aeroplane mode on.
      └──────────────────────────────────────────────────────┘
 ```
 
+## How it was built
+
+This app was specified in plain language and generated, not hand written.
+
+1. **Describe** — the app was written out as a request: a Kindle style reader with a tap dictionary,
+   read aloud, highlights, offline text recognition and an AI summary.
+2. **Generate** — **Claude Opus 5** turned each request into working Kotlin.
+3. **Build** — an agent drove the developer's own laptop through Desktop Commander: writing the
+   files, running Gradle, reading the build log and fixing its own compile errors.
+4. **Test** — every APK was installed on a real phone, and whatever broke went back as a crash log
+   or a screenshot.
+5. **Repeat** — nine builds, version 1.0 to 1.8, each feature and each fix going round the same loop.
+
+35 Kotlin files and 8,521 lines, none of them typed by hand.
+
 ## Install
 
 1. Download **[AaliReader-v1.8-arm64.apk](https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-arm64.apk)** (49 MB).

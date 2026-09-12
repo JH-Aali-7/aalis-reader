@@ -175,6 +175,11 @@ tracks the spoken word so he can follow along and pick up where his attention dr
 
 ## 8. Technical design
 
+**How the code was produced.** The application was specified in plain language and generated with
+**Claude Opus 5**, with an agent running the Gradle build on the developer's own machine and fixing
+its own compile errors. Each of the nine builds was installed on a real phone and the failures fed
+back as the next request. 35 Kotlin files, 8,521 lines, none typed by hand.
+
 **Client only architecture.** There is no backend. The app is a single Kotlin Android application;
 the only network calls are the optional dictionary and AI lookups, made directly from the device.
 
