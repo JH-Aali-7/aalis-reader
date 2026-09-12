@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_add_bookmark"
+        android:title="Add bookmark"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_add_note"
+        android:title="Add note here"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_notes"
+        android:title="Notes"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_wordlist"
+        android:title="Word list"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_ocr"
+        android:title="Recognise text (scanned pages)"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_export_pdf"
+        android:title="Export notes as PDF"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_stats"
+        android:title="Reading statistics"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_fullscreen"
+        android:title="Full screen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bookmarks"
+        android:title="@string/bookmarks"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_highlights"
+        android:title="@string/highlights"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_summary"
+        android:title="@string/ai_summary"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+</menu>

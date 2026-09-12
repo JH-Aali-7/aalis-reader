@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aali\'s Reader</string>
+    <string name="library">Library</string>
+    <string name="import_book">Import book</string>
+    <string name="settings">Settings</string>
+    <string name="backup_export">Export backup</string>
+    <string name="backup_import">Import backup</string>
+    <string name="no_books">No books yet\n\nTap “Add book” to import a PDF, EPUB, PPTX, DOCX or TXT, or copy files into the EbookReader/Books folder in your phone storage and pull to refresh.</string>
+    <string name="read_aloud">Read aloud</string>
+    <string name="stop">Stop</string>
+    <string name="ai_summary">AI summary</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="highlights">Highlights</string>
+    <string name="search">Search</string>
+    <string name="page_text">Page text mode</string>
+    <string name="contents">Contents</string>
+    <string name="display">Display</string>
+</resources>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aali's Reader — AI Study Reader</title>
+<meta name="description" content="An offline first Android reading app for students. PDF, EPUB, TXT, PowerPoint and Word, with a 273,000 word offline dictionary, word tracking read aloud, offline text recognition and AI summaries."/>
+<style>
+  :root{
+    --bg:#faf7ff; --panel:#ffffff; --ink:#1d1526; --muted:#5d5470;
+    --brand:#7c3aed; --brand-deep:#5b21b6; --line:#e7ddf7; --accent:#f5c518;
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#120f18; --panel:#1b1626; --ink:#efe9f7; --muted:#a99cc0;
+      --brand:#a97bff; --brand-deep:#8b5cf6; --line:#2c2340;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#120f18; --panel:#1b1626; --ink:#efe9f7; --muted:#a99cc0;
+    --brand:#a97bff; --brand-deep:#8b5cf6; --line:#2c2340;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:1000px;margin:0 auto;padding-inline:20px}
+  header{background:linear-gradient(160deg,var(--brand-deep),var(--brand) 60%,#c4b5fd);
+         color:#fff;padding-block:64px 72px}
+  header .wrap{display:grid;gap:26px}
+  .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+         padding:5px 12px;border-radius:999px;font-size:13px;letter-spacing:.04em}
+  h1{margin:0;font-size:clamp(32px,6vw,50px);line-height:1.1;letter-spacing:-.02em}
+  .tag{margin:0;font-size:clamp(17px,2.4vw,21px);max-width:60ch;color:rgba(255,255,255,.93)}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  .btn{display:inline-block;padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:650;
+       border:1px solid transparent}
+  .btn-main{background:#fff;color:var(--brand-deep)}
+  .btn-ghost{border-color:rgba(255,255,255,.55);color:#fff}
+  .btn:hover{transform:translateY(-1px)}
+  .facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:4px;font-size:14px;
+         color:rgba(255,255,255,.9)}
+  .facts b{display:block;font-size:22px;font-weight:700;color:#fff}
+  section{padding-block:56px}
+  h2{font-size:clamp(22px,3.4vw,30px);margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 26px;max-width:62ch}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+  .card h3{margin:0 0 6px;font-size:17px}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+  .k{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--brand);
+     font-weight:700;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+  th{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .yes{color:#16a34a;font-weight:700}
+  .no{color:var(--muted)}
+  ol.steps{padding-left:20px;color:var(--muted)}
+  ol.steps b{color:var(--ink)}
+  pre{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;
+      overflow-x:auto;font-size:13.5px}
+  footer{border-top:1px solid var(--line);padding-block:32px;color:var(--muted);font-size:14px}
+  a{color:var(--brand)}
+  .split{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">Pak Angels Generative &amp; Agentic AI Hackathon · Cohort 11</span>
+    <h1>Aali's Reader<br/>AI Study Reader</h1>
+    <p class="tag">One Android app for the five formats course material actually arrives in, with a
+      dictionary, a voice and text recognition that all keep working when the data runs out.</p>
+    <div class="cta">
+      <a class="btn btn-main" href="https://github.com/JH-Aali-7/aalis-reader/releases/latest">Download the APK</a>
+      <a class="btn btn-ghost" href="https://github.com/JH-Aali-7/aalis-reader">View the code</a>
+      <a class="btn btn-ghost" href="https://github.com/JH-Aali-7/aalis-reader/blob/main/docs/PRD.md">Read the PRD</a>
+    </div>
+    <div class="facts">
+      <div><b>273,221</b>words offline</div>
+      <div><b>5</b>file formats</div>
+      <div><b>0</b>internet needed to read</div>
+      <div><b>49 MB</b>install</div>
+    </div>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="k">The problem</div>
+  <h2>Studying on a phone, with no data left</h2>
+  <p class="sub">Course material reaches a student as WhatsApp PDFs, photographed notes and slide
+    decks. Three things break the reading.</p>
+  <div class="grid">
+    <div class="card"><h3>Unknown words stop you</h3><p>Leaving the page to search a term costs
+      attention and mobile data, and there is often no data at all.</p></div>
+    <div class="card"><h3>Scanned notes are just pictures</h3><p>They cannot be searched, selected,
+      copied or read aloud, which shuts out anyone who studies by listening.</p></div>
+    <div class="card"><h3>Every subject, a different format</h3><p>Slides are .pptx, assignments are
+      .docx, textbooks are .pdf. Converting a deck to text destroys the diagrams.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="k">The solution</div>
+  <h2>What works with the aeroplane mode on</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Capability</th><th>How</th><th>Needs internet</th></tr></thead>
+      <tbody>
+        <tr><td>Tap a word for its meaning</td><td>273,221 word SQLite dictionary inside the APK</td><td class="no">No</td></tr>
+        <tr><td>Read aloud, word by word</td><td>Device speech, spoken word highlighted, page follows</td><td class="no">No</td></tr>
+        <tr><td>Scanned pages become text</td><td>On device text recognition, model bundled</td><td class="no">No</td></tr>
+        <tr><td>Slides and documents in their real design</td><td>Custom OOXML renderer</td><td class="no">No</td></tr>
+        <tr><td>Rare or technical terms</td><td>Wiktionary and Wikipedia as a second opinion</td><td class="yes">Yes</td></tr>
+        <tr><td>Chapter summary</td><td>Google Gemini with your own free key</td><td class="yes">Yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="k">Features</div>
+  <h2>Everything in the build</h2>
+  <div class="grid">
+    <div class="card"><h3>Five formats, one library</h3><p>PDF, EPUB, TXT, PPTX and DOCX, with covers,
+      progress and resume where you stopped.</p></div>
+    <div class="card"><h3>Original slide design</h3><p>PowerPoint and Word open with real shape
+      positions, theme colours, fonts, pictures and tables, pinch zoomable like a PDF page.</p></div>
+    <div class="card"><h3>Tap for a meaning</h3><p>Works on the PDF page itself. Phrases, and
+      selection down to a single letter.</p></div>
+    <div class="card"><h3>Word tracking read aloud</h3><p>The spoken word is highlighted and the page
+      scrolls with the voice, in portrait and zoomed landscape.</p></div>
+    <div class="card"><h3>Offline text recognition</h3><p>Scanned pages become selectable, searchable,
+      speakable text without a single network call.</p></div>
+    <div class="card"><h3>AI summary that reads properly</h3><p>Equations come back as V₂O₅ and
+      1.06 F g⁻¹, not raw LaTeX.</p></div>
+    <div class="card"><h3>Highlights you keep</h3><p>Saved as .txt files with book name and page, and
+      exportable as a formatted PDF.</p></div>
+    <div class="card"><h3>Difficult word lists</h3><p>Per book and a master list, built from what you
+      actually looked up.</p></div>
+    <div class="card"><h3>Statistics and streaks</h3><p>Minutes read per day, a seven day chart and a
+      daily streak.</p></div>
+    <div class="card"><h3>Backup and restore</h3><p>One zip carries books, progress, highlights, notes
+      and settings to a new phone.</p></div>
+    <div class="card"><h3>Reading comfort</h3><p>Light, sepia, lavender and dark themes, auto scroll
+      at real reading speeds, immersive full page mode.</p></div>
+    <div class="card"><h3>Private by design</h3><p>No account, no analytics, no advertising. Books
+      stay on the phone.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="split">
+    <div>
+      <div class="k">Install</div>
+      <h2>Three steps</h2>
+      <ol class="steps">
+        <li><b>Download</b> the APK from the release page.</li>
+        <li><b>Allow</b> installing from unknown sources when Android asks.</li>
+        <li><b>Grant storage access</b>, then copy books into <code>Aali Reader/Books</code> or import
+          them from the library screen.</li>
+      </ol>
+      <p class="sub">Optional: paste a free Google Gemini key in Settings to switch AI summaries on.
+        If the main APK will not install, use the universal one in the same release.</p>
+    </div>
+    <div>
+      <div class="k">Build from source</div>
+      <h2>Two commands</h2>
+<pre>git clone https://github.com/JH-Aali-7/aalis-reader.git
+cd aalis-reader
+./gradlew assembleRelease</pre>
+      <p class="sub">Kotlin, Gradle 8.7, AGP 8.5.2, minSdk 24. Open the folder in Android Studio and
+        press Run for day to day work.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="k">Technology</div>
+  <h2>Built on</h2>
+  <div class="tablewrap">
+    <table>
+      <tbody>
+        <tr><th>Language</th><td>Kotlin, Android 7.0 and above, Material 3</td></tr>
+        <tr><th>PDF</th><td>AndroidPdfViewer for display, PDFBox for a per character text layer</td></tr>
+        <tr><th>Reflowable</th><td>WebView with an injected reading engine</td></tr>
+        <tr><th>Office</th><td>A from scratch OOXML to positioned HTML renderer</td></tr>
+        <tr><th>Dictionary</th><td>SQLite from WordNet, Webster's 1913, Gene Ontology, Human Disease Ontology</td></tr>
+        <tr><th>Recognition</th><td>ML Kit text recognition, bundled model, offline</td></tr>
+        <tr><th>Speech</th><td>Android TextToSpeech with word range callbacks</td></tr>
+        <tr><th>AI</th><td>Google Gemini REST, user supplied key</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="wrap">
+  Aali's Reader · MIT licensed · Built for the Pak Angels Generative &amp; Agentic AI Hackathon,
+  Cohort 11 · <a href="https://github.com/JH-Aali-7/aalis-reader">Source on GitHub</a>
+</footer>
+
+</body>
+</html>

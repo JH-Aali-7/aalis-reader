@@ -1,0 +1,100 @@
+/* Injected reading styles. Theme and typography values come from Kotlin. */
+html {
+    -webkit-tap-highlight-color: rgba(124, 58, 237, 0.12);
+}
+/* Pages that must keep their original design (PowerPoint slides, Word pages)
+   carry class "fixed-layout" on the body. Reading styles skip those, so the
+   file looks exactly like the original, the way a PDF page does. */
+body:not(.fixed-layout) {
+    margin: 0 !important;
+    padding: 18px var(--reader-margin, 20px) 140px var(--reader-margin, 20px) !important;
+    font-family: var(--reader-font, Georgia, serif) !important;
+    font-size: var(--reader-size, 20px) !important;
+    line-height: var(--reader-line, 1.6) !important;
+    background: var(--reader-bg, #F4ECD8) !important;
+    color: var(--reader-fg, #2B2118) !important;
+    text-align: justify;
+    word-wrap: break-word;
+    /* selection must stay enabled for highlighting to work */
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: default;
+}
+body.theme-light    { --reader-bg: #FFFFFF; --reader-fg: #1B1B1B; }
+body.theme-sepia    { --reader-bg: #F4ECD8; --reader-fg: #2B2118; }
+body.theme-lavender { --reader-bg: #F3EDFF; --reader-fg: #241A33; }
+body.theme-dark     { --reader-bg: #121016; --reader-fg: #CFC7D6; }
+body.theme-dark:not(.fixed-layout) img { opacity: 0.85; }
+
+::selection { background: rgba(124, 58, 237, 0.32); }
+
+body:not(.fixed-layout) p,
+body:not(.fixed-layout) div,
+body:not(.fixed-layout) li,
+body:not(.fixed-layout) blockquote {
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    background: transparent !important;
+    max-width: 100% !important;
+}
+body:not(.fixed-layout) h1, body:not(.fixed-layout) h2,
+body:not(.fixed-layout) h3, body:not(.fixed-layout) h4,
+body:not(.fixed-layout) h5, body:not(.fixed-layout) h6 {
+    color: inherit !important;
+    line-height: 1.3 !important;
+    font-family: inherit !important;
+}
+body:not(.fixed-layout) img,
+body:not(.fixed-layout) svg,
+body:not(.fixed-layout) video { max-width: 100% !important; height: auto !important; }
+body:not(.fixed-layout) table { max-width: 100%; overflow-x: auto; display: block; }
+a { color: #7C3AED; }
+body.theme-dark:not(.fixed-layout) a { color: #BFA1FA; }
+
+mark.reader-hl {
+    background: linear-gradient(transparent 42%, rgba(245, 197, 24, 0.62) 42%) !important;
+    color: inherit !important;
+    padding: 0 1px;
+}
+body.theme-dark mark.reader-hl {
+    background: linear-gradient(transparent 42%, rgba(245, 158, 11, 0.42) 42%) !important;
+}
+
+/* the paragraph being read */
+.tts-active {
+    background: rgba(124, 58, 237, 0.10) !important;
+    border-radius: 4px;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.10);
+}
+body.theme-dark .tts-active {
+    background: rgba(191, 161, 250, 0.14) !important;
+    box-shadow: 0 0 0 3px rgba(191, 161, 250, 0.14);
+}
+
+/* the exact words being spoken right now */
+#tts-hl {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+}
+.tts-word-box {
+    position: absolute;
+    background: rgba(124, 58, 237, 0.30);
+    border-bottom: 2px solid rgba(124, 58, 237, 0.85);
+    border-radius: 3px;
+    pointer-events: none;
+    transition: left 90ms linear, top 90ms linear,
+                width 90ms linear, height 90ms linear;
+}
+body.theme-dark .tts-word-box {
+    background: rgba(191, 161, 250, 0.28);
+    border-bottom-color: rgba(207, 185, 255, 0.9);
+}
+
+.reader-flash { animation: readerflash 1.6s ease-out 1; }
+@keyframes readerflash {
+    0%   { background: rgba(245, 158, 11, 0.65); }
+    100% { background: transparent; }
+}

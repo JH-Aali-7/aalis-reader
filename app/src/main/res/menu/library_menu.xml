@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_stats"
+        android:icon="@drawable/ic_stats"
+        android:title="Reading statistics"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_all_words"
+        android:title="Word list (all books)"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_backup_export"
+        android:title="@string/backup_export"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_backup_import"
+        android:title="@string/backup_import"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+</menu>

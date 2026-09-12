@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AaliReader" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_300</item>
+        <item name="colorOnPrimary">@color/purple_900</item>
+        <item name="colorPrimaryContainer">@color/purple_800</item>
+        <item name="colorOnPrimaryContainer">@color/purple_100</item>
+
+        <item name="colorSecondary">@color/purple_200</item>
+        <item name="colorOnSecondary">@color/purple_900</item>
+        <item name="colorSecondaryContainer">@color/purple_700</item>
+        <item name="colorOnSecondaryContainer">@color/purple_100</item>
+
+        <item name="colorTertiary">@color/accent_pink</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="colorSurfaceVariant">#241C2E</item>
+        <item name="colorOnSurfaceVariant">@color/purple_200</item>
+        <item name="colorOutline">@color/outline_dark</item>
+
+        <item name="android:statusBarColor">@color/purple_900</item>
+        <item name="android:navigationBarColor">@color/purple_900</item>
+
+        <item name="materialAlertDialogTheme">@style/Theme.AaliReader.Dialog</item>
+        <item name="alertDialogTheme">@style/Theme.AaliReader.Dialog</item>
+        <item name="android:alertDialogTheme">@style/Theme.AaliReader.Dialog</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.AaliReader.BottomSheet</item>
+        <item name="android:textColorPrimary">@color/on_surface_dark</item>
+    </style>
+
+    <style name="Theme.AaliReader.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/purple_300</item>
+        <item name="colorOnPrimary">@color/purple_900</item>
+        <item name="colorSurface">#221B2C</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="android:textColorPrimary">@color/on_surface_dark</item>
+        <item name="android:textColorSecondary">@color/on_surface_dark</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AaliDialog.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AaliDialog.Button.Text</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AaliDialog.Button.Text</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/AaliDialog.Title</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/AaliDialog.Body</item>
+        <item name="shapeAppearanceOverlay">@style/AaliDialog.Shape</item>
+    </style>
+
+    <style name="Theme.AaliReader.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="colorPrimary">@color/purple_300</item>
+        <item name="colorSurface">#221B2C</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+    </style>
+</resources>

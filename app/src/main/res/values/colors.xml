@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Purple brand ramp -->
+    <color name="purple_50">#F7F2FF</color>
+    <color name="purple_100">#EDE4FF</color>
+    <color name="purple_200">#D9C6FF</color>
+    <color name="purple_300">#BFA1FA</color>
+    <color name="purple_400">#9F72F0</color>
+    <color name="purple_500">#7C3AED</color>
+    <color name="purple_600">#6D28D9</color>
+    <color name="purple_700">#5B21B6</color>
+    <color name="purple_800">#4C1D95</color>
+    <color name="purple_900">#2E1065</color>
+
+    <color name="accent_pink">#D946A6</color>
+    <color name="accent_amber">#F59E0B</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Light surfaces -->
+    <color name="bg_light">#FAF7FF</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="on_surface_light">#1C1520</color>
+    <color name="outline_light">#E3D8F5</color>
+
+    <!-- Dark surfaces -->
+    <color name="bg_dark">#100C16</color>
+    <color name="surface_dark">#1A1420</color>
+    <color name="on_surface_dark">#EBE3F5</color>
+    <color name="outline_dark">#3A2E4A</color>
+
+    <!-- Reader page backgrounds -->
+    <color name="page_light">#FFFFFF</color>
+    <color name="page_sepia">#F4ECD8</color>
+    <color name="page_lavender">#F3EDFF</color>
+    <color name="page_dark">#121016</color>
+
+    <color name="highlight_yellow">#66FFEB3B</color>
+
+    <!-- legacy names kept so older layouts still resolve -->
+    <color name="primary">#7C3AED</color>
+    <color name="primary_dark">#5B21B6</color>
+    <color name="primary_container">#EDE4FF</color>
+    <color name="sepia_bg">#F4ECD8</color>
+    <color name="reader_night_bg">#121016</color>
+</resources>

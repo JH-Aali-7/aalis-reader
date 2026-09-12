@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bar_gradient"
+        app:title=""
+        app:titleTextColor="@color/white"
+        app:subtitleTextColor="#E4D8FF"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+    <FrameLayout
+        android:id="@+id/pdfFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.aali.ebookreader.PdfSelectionOverlay
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/selectionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/floating_bar_bg"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/selectionButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/hintChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/floating_bar_bg"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="7dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bar_gradient"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="2dp">
+
+        <ImageButton
+            android:id="@+id/btnJump"
+            style="@style/ReaderBarButton"
+            android:contentDescription="Go to page"
+            android:src="@drawable/ic_list" />
+
+        <ImageButton
+            android:id="@+id/btnMode"
+            style="@style/ReaderBarButton"
+            android:contentDescription="Page view mode"
+            android:src="@drawable/ic_scroll_mode" />
+
+        <TextView
+            android:id="@+id/txtPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#F0E7FF"
+            android:textSize="12sp"
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/btnTts"
+            style="@style/ReaderBarButton"
+            android:contentDescription="@string/read_aloud"
+            android:src="@drawable/ic_speaker" />
+
+        <ImageButton
+            android:id="@+id/btnAuto"
+            style="@style/ReaderBarButton"
+            android:contentDescription="Auto scroll"
+            android:src="@drawable/ic_play" />
+
+        <ImageButton
+            android:id="@+id/btnTextMode"
+            style="@style/ReaderBarButton"
+            android:contentDescription="@string/page_text"
+            android:src="@drawable/ic_text" />
+
+        <ImageButton
+            android:id="@+id/btnNight"
+            style="@style/ReaderBarButton"
+            android:contentDescription="Night mode"
+            android:src="@drawable/ic_night" />
+    </LinearLayout>
+</LinearLayout>

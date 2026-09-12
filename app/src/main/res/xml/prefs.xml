@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="AI summary (needs internet)">
+        <EditTextPreference
+            android:key="gemini_key"
+            android:title="Gemini API key"
+            android:summary="Free key from aistudio.google.com → Get API key. Only AI summaries need it; everything else works offline."
+            app:useSimpleSummaryProvider="false" />
+        <EditTextPreference
+            android:key="gemini_model"
+            android:title="Gemini model"
+            android:defaultValue="gemini-flash-latest"
+            android:summary="gemini-flash-latest always points at the current fast model" />
+        <Preference
+            android:key="pick_model"
+            android:title="Choose model from your account"
+            android:summary="Loads the live list of models your key can use" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Read aloud (offline)">
+        <SeekBarPreference
+            android:key="tts_rate"
+            android:title="Speech speed"
+            android:defaultValue="100"
+            android:max="200"
+            app:min="50"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:key="tts_pitch"
+            android:title="Speech pitch"
+            android:defaultValue="100"
+            android:max="150"
+            app:min="60"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Auto scroll">
+        <SeekBarPreference
+            android:key="auto_wpm"
+            android:title="Reading speed (words per minute)"
+            android:defaultValue="250"
+            android:max="900"
+            app:min="60"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Reading">
+        <SwitchPreferenceCompat
+            android:key="keep_screen_on"
+            android:title="Keep screen on while reading"
+            android:defaultValue="true" />
+        <SwitchPreferenceCompat
+            android:key="tap_word_pdf"
+            android:title="Tap a word in PDFs for its meaning"
+            android:summary="Turn off if you would rather every tap just hide the bars"
+            android:defaultValue="true" />
+        <Preference
+            android:key="open_stats"
+            android:title="Reading statistics"
+            android:summary="Time per day, streak and totals" />
+    </PreferenceCategory>
+</PreferenceScreen>

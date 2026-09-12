@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ReaderBarButton">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:padding">6dp</item>
+    </style>
+
+    <!-- Dialog pieces: a filled positive button is always readable -->
+    <style name="AaliDialog.Button.Positive" parent="Widget.Material3.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:minWidth">88dp</item>
+        <item name="backgroundTint">@color/purple_600</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AaliDialog.Button.Text" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="AaliDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="AaliDialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AaliDialog.Shape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+</resources>
