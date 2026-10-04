@@ -47,4 +47,16 @@ object Prefs {
     fun autoWpm(c: Context): Int = sp(c).getInt("auto_wpm", 250)
     fun setAutoWpm(c: Context, v: Int) = sp(c).edit().putInt("auto_wpm", v).apply()
     fun autoWpmChosen(c: Context): Boolean = sp(c).contains("auto_wpm")
+
+    /** Show the Urdu meaning under English definitions. */
+    fun urduMeanings(c: Context): Boolean = sp(c).getBoolean("urdu_meanings", true)
+
+    /** Read Urdu passages aloud in an Urdu voice when the phone has one. */
+    fun urduVoice(c: Context): Boolean = sp(c).getBoolean("urdu_voice", true)
+
+    /** Text recognition language chosen for a book: "eng" or "urd". */
+    fun ocrLang(c: Context, book: String): String =
+        sp(c).getString("ocr_lang:" + book.hashCode(), "")!!
+    fun setOcrLang(c: Context, book: String, lang: String) =
+        sp(c).edit().putString("ocr_lang:" + book.hashCode(), lang).apply()
 }

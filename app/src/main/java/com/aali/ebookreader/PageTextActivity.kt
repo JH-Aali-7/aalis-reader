@@ -94,6 +94,7 @@ class PageTextActivity : AppCompatActivity() {
         }
 
         DictionaryHelper.warmUp(this)
+        UrduDictionary.warmUp(this)
         loadPage()
     }
 
@@ -156,11 +157,7 @@ class PageTextActivity : AppCompatActivity() {
             "wordlist" -> {
                 val first = text.split(Regex("\\s+")).firstOrNull()?.trim()?.lowercase() ?: return
                 Thread {
-                    val meaning = DictionaryHelper.lookup(this, first).firstOrNull()
-                        ?.let {
-                            DictionaryHelper.posLabel(it.pos) + ": " +
-                                (it.defs.lineSequence().firstOrNull()?.removePrefix("1. ") ?: "")
-                        } ?: ""
+                    val meaning = DictionaryHelper.shortMeaning(this, first)
                     val ok = Db.get(this).addWord(bookPath, first, meaning)
                     runOnUiThread {
                         Toast.makeText(

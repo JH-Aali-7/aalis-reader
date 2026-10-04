@@ -166,6 +166,7 @@ class PdfReaderActivity : AppCompatActivity(), PdfSelectionOverlay.Host {
             }
         }
         DictionaryHelper.warmUp(this)
+        UrduDictionary.warmUp(this)
         Thread { PdfTextExtractor.preloadOcr(this, bookPath) }.start()
         reloadHighlights()
 
@@ -398,10 +399,7 @@ class PdfReaderActivity : AppCompatActivity(), PdfSelectionOverlay.Host {
             "wordlist" -> {
                 val first = DictionaryHelper.phrase(text).lowercase()
                 Thread {
-                    val meaning = DictionaryHelper.lookup(this, first).firstOrNull()?.let {
-                        DictionaryHelper.posLabel(it.pos) + ": " +
-                            (it.defs.lineSequence().firstOrNull()?.removePrefix("1. ") ?: "")
-                    } ?: ""
+                    val meaning = DictionaryHelper.shortMeaning(this, first)
                     val ok = Db.get(this).addWord(bookPath, first, meaning)
                     runOnUiThread {
                         Toast.makeText(
@@ -440,21 +438,38 @@ class PdfReaderActivity : AppCompatActivity(), PdfSelectionOverlay.Host {
     private fun offerOcrIfNeeded() {
         val page1 = currentPage + 1
         val data = wordsByPage[page1]
-        if (data != null && data.words.isNotEmpty()) return
+        if (data != null && data.words.isNotEmpty() && !data.fromOcr) {
+            Toast.makeText(this, "This page already has real text", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val again = data != null && data.words.isNotEmpty()
+        val choices = arrayOf(
+            "This page  ·  English",
+            "This page  ·  اردو  Urdu",
+            "Whole document  ·  English",
+            "Whole document  ·  اردو  Urdu"
+        )
         Ui.builder(this)
-            .setTitle("No text on this page")
-            .setMessage(
-                "This page looks like a scan, so there is no text to select.\n\n" +
-                    "Recognise the text on it? This happens on your phone with no " +
-                    "internet, and afterwards you can select, look up and listen to it."
+            .setTitle(
+                if (again) "Recognise this page again"
+                else "No text on this page — recognise it?"
             )
-            .setPositiveButton("Recognise this page") { _, _ -> runOcr(page1, page1) }
-            .setNeutralButton("Whole document") { _, _ -> runOcr(1, pageCount) }
+            .setItems(choices) { _, which ->
+                val lang = if (which % 2 == 1) OcrHelper.URDU else OcrHelper.ENGLISH
+                Prefs.setOcrLang(this, bookPath, lang)
+                if (which < 2) runOcr(page1, page1, lang, force = true)
+                else runOcr(1, pageCount, lang, force = again)
+            }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun runOcr(from: Int, to: Int) {
+    private fun runOcr(
+        from: Int,
+        to: Int,
+        lang: String = Prefs.ocrLang(this, bookPath).ifEmpty { OcrHelper.ENGLISH },
+        force: Boolean = false
+    ) {
         val total = to - from + 1
         val progress = Ui.builder(this)
             .setTitle("Recognising text")
@@ -474,15 +489,20 @@ class PdfReaderActivity : AppCompatActivity(), PdfSelectionOverlay.Host {
             for (p in from..to) {
                 if (cancelled) break
                 runOnUiThread {
-                    progress.setMessage("Page $p  ($done of $total done)")
+                    progress.setMessage(
+                        (if (lang == OcrHelper.URDU) "اردو  ·  Urdu\n" else "") +
+                            "Page $p  ($done of $total done)"
+                    )
                 }
                 val existing = wordsByPage[p]
-                if (existing != null && existing.words.isNotEmpty() && !existing.fromOcr) {
+                if (existing != null && existing.words.isNotEmpty() &&
+                    (!existing.fromOcr || !force)
+                ) {
                     done++
                     continue
                 }
                 val res = try {
-                    OcrHelper.recognisePage(this, bookPath, p)
+                    OcrHelper.recognisePage(this, bookPath, p, lang)
                 } catch (e: Throwable) {
                     null
                 }
@@ -646,7 +666,8 @@ class PdfReaderActivity : AppCompatActivity(), PdfSelectionOverlay.Host {
                 val c = text[end]
                 end++
                 val long = end - i > 240
-                if ((c == '.' || c == '!' || c == '?' || c == ';' || c == ':') &&
+                if ((c == '.' || c == '!' || c == '?' || c == ';' || c == ':' ||
+                        c == '\u06D4' || c == '\u061F' || c == '\u061B') &&
                     end - i > 24
                 ) break
                 if (long && c == ' ') break

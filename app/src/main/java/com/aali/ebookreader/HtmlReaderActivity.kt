@@ -82,6 +82,10 @@ class HtmlReaderActivity : AppCompatActivity() {
 
         webView.settings.javaScriptEnabled = true
         webView.settings.allowFileAccess = true
+        // lets the page load the bundled Urdu font and an EPUB's own fonts, which
+        // Chromium otherwise blocks as cross origin requests between file:// URLs
+        @Suppress("DEPRECATION")
+        webView.settings.allowFileAccessFromFileURLs = true
         webView.settings.domStorageEnabled = true
         // PowerPoint and Word files keep their original page design, so they
         // are shown whole and scaled to the screen, and pinch zoomed, exactly
@@ -130,6 +134,7 @@ class HtmlReaderActivity : AppCompatActivity() {
             }
         }
         DictionaryHelper.warmUp(this)
+        UrduDictionary.warmUp(this)
 
         findViewById<ImageButton>(R.id.btnContents).setOnClickListener { showContents() }
         findViewById<ImageButton>(R.id.btnPrev).setOnClickListener { relativeChapter(-1) }
@@ -307,10 +312,7 @@ class HtmlReaderActivity : AppCompatActivity() {
             "wordlist" -> {
                 val first = text.split(Regex("\\s+")).firstOrNull()?.trim()?.lowercase() ?: return
                 Thread {
-                    val meaning = DictionaryHelper.lookup(this, first).firstOrNull()
-                        ?.let { DictionaryHelper.posLabel(it.pos) + ": " +
-                            (it.defs.lineSequence().firstOrNull()?.removePrefix("1. ") ?: "") }
-                        ?: ""
+                    val meaning = DictionaryHelper.shortMeaning(this, first)
                     val ok = Db.get(this).addWord(bookPath, first, meaning)
                     runOnUiThread {
                         Toast.makeText(

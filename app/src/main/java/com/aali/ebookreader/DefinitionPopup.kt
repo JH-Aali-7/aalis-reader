@@ -58,12 +58,20 @@ object DefinitionPopup {
             )
         })
 
-        root.addView(TextView(activity).apply {
+        val isUrduWord = UrduText.isUrdu(word)
+        val urduFace = UrduFont.get(activity)
+        val headerView = TextView(activity).apply {
             text = word
-            textSize = 25f
+            textSize = if (isUrduWord) 27f else 25f
             setTextColor(accent)
-            setTypeface(typeface, Typeface.BOLD)
-        })
+            if (isUrduWord && urduFace != null) {
+                typeface = urduFace
+                setLineSpacing(0f, 1.15f)
+            } else {
+                setTypeface(typeface, Typeface.BOLD)
+            }
+        }
+        root.addView(headerView)
 
         val bodyView = TextView(activity).apply {
             textSize = 16f
@@ -108,6 +116,78 @@ object DefinitionPopup {
                 sb.append(text).append("\n\n")
             }
             bodyView.text = sb
+        }
+
+        /** A small coloured heading inside the meaning text. */
+        fun heading(sb: SpannableStringBuilder, label: String, color: Int = dim) {
+            val st = sb.length
+            sb.append(label).append("\n")
+            sb.setSpan(StyleSpan(Typeface.BOLD_ITALIC), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            sb.setSpan(ForegroundColorSpan(color), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            sb.setSpan(RelativeSizeSpan(0.85f), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        /** Appends Urdu text set in the Nastaliq typeface. */
+        fun urduText(sb: SpannableStringBuilder, text: String) {
+            val st = sb.length
+            sb.append(text)
+            if (urduFace != null) {
+                sb.setSpan(UrduFont.Span(urduFace), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                sb.setSpan(RelativeSizeSpan(1.08f), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+
+        /** The Urdu meanings of an English word, under their own heading. */
+        fun appendUrduMeanings(sb: SpannableStringBuilder, meanings: List<UrduMeaning>) {
+            if (meanings.isEmpty()) return
+            heading(sb, "اردو  ·  Urdu meaning", accent)
+            for (m in meanings.take(6)) {
+                val p = DictionaryHelper.posLabel(m.pos).ifEmpty { m.pos }
+                if (p.isNotEmpty()) {
+                    val st = sb.length
+                    sb.append(p).append("  ")
+                    sb.setSpan(ForegroundColorSpan(dim), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    sb.setSpan(RelativeSizeSpan(0.8f), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                urduText(sb, m.text)
+                sb.append("\n")
+            }
+            sb.append("\n")
+        }
+
+        /** An Urdu headword: pronunciation, English meanings, Urdu meanings. */
+        fun appendUrduEntry(sb: SpannableStringBuilder, e: UrduEntry) {
+            if (e.lemmaOf != null && UrduText.normalize(e.word) != UrduText.normalize(word)) {
+                val st = sb.length
+                sb.append("dictionary form  ")
+                sb.setSpan(ForegroundColorSpan(dim), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                sb.setSpan(RelativeSizeSpan(0.85f), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                urduText(sb, e.word)
+                sb.append("\n")
+            } else if (e.word != word) {
+                urduText(sb, e.word)
+                sb.append("\n")
+            }
+            val meta = listOf(e.roman, UrduDictionary.posLabel(e.pos)).filter { it.isNotBlank() }
+            if (meta.isNotEmpty()) {
+                val st = sb.length
+                sb.append(meta.joinToString("  ·  ")).append("\n\n")
+                sb.setSpan(StyleSpan(Typeface.ITALIC), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                sb.setSpan(ForegroundColorSpan(dim), st, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            if (e.english.isNotEmpty()) {
+                heading(sb, "English meaning")
+                e.english.take(8).forEachIndexed { i, g -> sb.append("${i + 1}. ").append(g).append("\n") }
+                sb.append("\n")
+            }
+            if (e.urdu.isNotEmpty()) {
+                heading(sb, "اردو معنی  ·  Urdu meaning", accent)
+                e.urdu.take(5).forEachIndexed { i, g ->
+                    urduText(sb, "${i + 1}۔ $g")
+                    sb.append("\n")
+                }
+                sb.append("\n")
+            }
         }
 
         val buttonRow = LinearLayout(activity).apply {
@@ -171,15 +251,16 @@ object DefinitionPopup {
             }
         }
 
+        val lang = if (isUrduWord) "ur" else "en"
         lateinit var wiktBtn: Button
         lateinit var wikiBtn: Button
         wiktBtn = addBtn("Wiktionary")
         wiktBtn.setOnClickListener {
-            fetch("Wiktionary", wiktBtn) { OnlineDictionary.wiktionary(word) }
+            fetch("Wiktionary", wiktBtn) { OnlineDictionary.wiktionary(word, lang) }
         }
         wikiBtn = addBtn("Wikipedia")
         wikiBtn.setOnClickListener {
-            fetch("Wikipedia", wikiBtn) { OnlineDictionary.wikipedia(word) }
+            fetch("Wikipedia", wikiBtn) { OnlineDictionary.wikipedia(word, lang) }
         }
         val aiBtn = addBtn("Ask AI")
         aiBtn.setOnClickListener {
@@ -214,8 +295,8 @@ object DefinitionPopup {
         /** Looks the term up online by itself when nothing was found locally. */
         fun autoOnline(showNotFound: Boolean) {
             Thread {
-                val wikt = OnlineDictionary.wiktionary(word)
-                val wiki = if (wikt == null) OnlineDictionary.wikipedia(word) else null
+                val wikt = OnlineDictionary.wiktionary(word, lang)
+                val wiki = if (wikt == null) OnlineDictionary.wikipedia(word, lang) else null
                 activity.runOnUiThread {
                     if (wikt == null && wiki == null) {
                         if (showNotFound) {
@@ -257,6 +338,47 @@ object DefinitionPopup {
         dialog.show()
 
         Thread {
+            if (isUrduWord) {
+                val entry = UrduDictionary.lookup(activity, word)
+                val parts = if (entry == null) UrduDictionary.lookupWords(activity, word) else emptyList()
+                activity.runOnUiThread {
+                    offlineText.clear()
+                    when {
+                        entry != null -> {
+                            appendUrduEntry(offlineText, entry)
+                            firstMeaning = (entry.english.firstOrNull() ?: entry.urdu.firstOrNull() ?: "")
+                        }
+                        parts.isNotEmpty() -> {
+                            heading(offlineText, "No entry for the whole phrase, so here is each word.")
+                            offlineText.append("\n")
+                            for ((w, e) in parts) {
+                                val st = offlineText.length
+                                urduText(offlineText, w)
+                                offlineText.setSpan(ForegroundColorSpan(accent), st, offlineText.length,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                offlineText.append("\n")
+                                offlineText.append(e.english.take(3).joinToString("; ")).append("\n\n")
+                            }
+                            firstMeaning = parts.joinToString("; ") { (w, e) ->
+                                w + ": " + (e.english.firstOrNull() ?: "")
+                            }
+                        }
+                        else -> {
+                            offlineText.append("Not in the offline Urdu dictionary.\n")
+                            offlineText.append(
+                                if (OnlineDictionary.isOnline(activity)) "Searching online…\n\n"
+                                else "Connect to the internet and tap Wiktionary or Wikipedia above.\n\n"
+                            )
+                        }
+                    }
+                    redraw()
+                    if (entry == null && parts.isEmpty() && OnlineDictionary.isOnline(activity)) {
+                        autoOnline(true)
+                    }
+                }
+                return@Thread
+            }
+
             var entries = DictionaryHelper.lookup(activity, word)
             // a phrase with no entry of its own: explain each word instead
             var perWord: List<Pair<String, List<DictEntry>>> = emptyList()
@@ -267,6 +389,13 @@ object DefinitionPopup {
                         .filter { it.second.isNotEmpty() }
                 }
             }
+            // Urdu meanings for the word, using the dictionary form when one was found
+            val urduMeanings = if (Prefs.urduMeanings(activity)) {
+                UrduDictionary.englishToUrdu(
+                    activity,
+                    listOfNotNull(entries.firstOrNull()?.word, DictionaryHelper.clean(word))
+                )
+            } else emptyList()
             activity.runOnUiThread {
                 offlineText.clear()
                 if (entries.isEmpty() && perWord.isNotEmpty()) {
@@ -309,7 +438,10 @@ object DefinitionPopup {
                     if (OnlineDictionary.isOnline(activity)) autoOnline(false)
                     return@runOnUiThread
                 }
-                if (entries.isEmpty()) {
+                if (entries.isEmpty() && urduMeanings.isNotEmpty()) {
+                    appendUrduMeanings(offlineText, urduMeanings)
+                    firstMeaning = urduMeanings.first().text
+                } else if (entries.isEmpty()) {
                     offlineText.append("Not in the offline dictionary.\n")
                     if (OnlineDictionary.isOnline(activity)) {
                         offlineText.append("Searching online…\n\n")
@@ -352,11 +484,19 @@ object DefinitionPopup {
                         )
                         offlineText.append(e.defs.trim()).append("\n\n")
                     }
+                    if (urduMeanings.isNotEmpty()) {
+                        // the Urdu meaning goes straight under the first definition,
+                        // where a student looks for it, not at the very bottom
+                        val urduSb = SpannableStringBuilder()
+                        appendUrduMeanings(urduSb, urduMeanings)
+                        val firstEnd = offlineText.indexOf("\n\n").let { if (it < 0) offlineText.length else it + 2 }
+                        offlineText.insert(firstEnd, urduSb)
+                    }
                 }
                 redraw()
 
                 // nothing offline: go and find it online straight away
-                if (entries.isEmpty() && OnlineDictionary.isOnline(activity)) {
+                if (entries.isEmpty() && urduMeanings.isEmpty() && OnlineDictionary.isOnline(activity)) {
                     autoOnline(true)
                 }
             }

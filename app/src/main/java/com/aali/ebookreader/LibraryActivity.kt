@@ -84,6 +84,7 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         DictionaryHelper.warmUp(this)
+        UrduDictionary.warmUp(this)
         showCrashReportIfAny()
         checkStoragePermission(showDialog = true)
     }

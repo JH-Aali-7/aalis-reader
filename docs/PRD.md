@@ -2,7 +2,7 @@
 
 **Product:** Aali's Reader — AI Study Reader
 **Platform:** Android 7.0 and above
-**Version covered:** 1.8 (hackathon build)
+**Version covered:** 1.9 (hackathon build, with Urdu)
 **Author:** Aali · Team [placeholder]
 **Event:** Pak Angels Generative & Agentic AI Training, Cohort 11 — Hackathon
 **Date:** September 2026
@@ -155,7 +155,25 @@ tracks the spoken word so he can follow along and pick up where his attention dr
 - **FR7.3** Export all highlights and notes for a book as a formatted PDF.
 - **FR7.4** Bookmarks and per book search history.
 
-### 6.8 Statistics and backup
+### 6.8 Urdu
+
+- **FR8.1** Tapping an Urdu word in any format shows its English meaning, romanised pronunciation and
+  part of speech, and an Urdu explanation where the source has one, with no connection.
+- **FR8.2** English definitions also show the Urdu meaning (اردو معنی). A setting turns this off.
+- **FR8.3** Spelling variants match: vowel marks, Arabic and Urdu forms of ی ک ہ, and PDF
+  presentation-form glyphs all normalise to one spelling.
+- **FR8.4** Inflected words are traced to their dictionary form (plural, oblique, feminine,
+  participle and Arabic -aat plural endings).
+- **FR8.5** Scanned Urdu pages are recognised on the device with the Tesseract Urdu model; words come
+  back in right to left reading order with positions, so they can be tapped, selected and spoken.
+- **FR8.6** Recognised Urdu is checked against the dictionary to repair the two commonest Nastaliq
+  misreadings: a space one letter early, and one letter read as its look alike.
+- **FR8.7** Urdu text renders right to left in Noto Nastaliq Urdu; Urdu PDF text layers are re-ordered
+  right to left line by line, keeping embedded English and numbers left to right.
+- **FR8.8** Read aloud switches to an Urdu voice for Urdu passages when the phone has one, and tells
+  the user how to install it when it does not.
+
+### 6.9 Statistics and backup
 
 - **FR8.1** Record reading time per day; show a seven day chart, totals and a daily streak.
 - **FR8.2** Export everything as one zip and import it on another device.
@@ -167,7 +185,7 @@ tracks the spoken word so he can follow along and pick up where his attention dr
 | NFR1 | Cold start | Under 2 seconds on a mid range phone |
 | NFR2 | Dictionary lookup | Under 300 ms |
 | NFR3 | Memory | A 200 MB PDF opens without exceeding the heap; parsing streams through temporary files, page caches are bounded |
-| NFR4 | Install size | Under 55 MB for the per architecture APK |
+| NFR4 | Install size | Under 70 MB for the per architecture APK, Urdu OCR model and dictionaries included |
 | NFR5 | Offline | Every feature except online lookup and AI summary works with no connection |
 | NFR6 | Privacy | No account, no analytics, no advertising; book content leaves the device only for an explicitly requested AI summary |
 | NFR7 | Compatibility | Android 7.0 (API 24) and above, arm64 and arm32 |
@@ -191,6 +209,8 @@ the only network calls are the optional dictionary and AI lookups, made directly
 | Reflowable formats | WebView with an injected engine (`reader.js`, `reader.css`) handling word taps, selection, highlights and speech tracking |
 | Office formats | `OfficeRenderer.kt` reads the OOXML drawing model — shape trees, EMU geometry, theme colours and fonts, placeholder inheritance from layout and master — and emits absolutely positioned HTML at the true page size |
 | Dictionary | SQLite shipped gzipped in assets, unpacked once, indexed by word, with scientific plural morphology and source ranking |
+| Urdu dictionary | A second SQLite database: `ur` (64,378 normalised Urdu headwords) and `en_ur` (27,148 English words with Urdu meanings), built from English and Urdu Wiktionary |
+| Urdu OCR | Tesseract 5 through tesseract4android with `urd.traineddata` (tessdata_best), pages rendered at about 290 dpi, then a dictionary repair pass |
 | OCR | ML Kit text recognition with the bundled model; word boxes are converted into the same structure the PDF text layer produces, so every downstream feature works unchanged |
 | Speech | `TextToSpeech` with `UtteranceProgressListener.onRangeStart` for word ranges, mapped back to on screen rectangles |
 | Persistence | SQLite: progress, highlights, notes, bookmarks, searches, vocabulary, OCR cache, reading time |
@@ -221,9 +241,12 @@ the only network calls are the optional dictionary and AI lookups, made directly
 summary, original design rendering for Office files, statistics and streaks, highlight and note
 export, backup and restore.
 
+**Shipped in 1.9** — Urdu: offline Urdu↔English dictionary, Urdu meanings under English
+definitions, offline Urdu OCR, right to left Nastaliq layout, and an Urdu voice for read aloud.
+
 **Next**
 
-- Urdu and Arabic dictionary and text to speech
+- A larger Urdu to Urdu dictionary as openly licensed sources allow
 - Handwriting recognition for handwritten notes
 - Flashcard generation from the difficult words list, with spaced repetition
 - A question and answer mode over the current book
@@ -245,6 +268,6 @@ export, backup and restore.
 | --- | --- |
 | Code | https://github.com/JH-Aali-7/aalis-reader |
 | Download and project page | https://jh-aali-7.github.io/aalis-reader/ |
-| APK download | https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.8-arm64.apk |
+| APK download | https://github.com/JH-Aali-7/aalis-reader/raw/main/release/AaliReader-v1.9-arm64.apk |
 | Presentation slides | [add link] |
 | Presentation video | [add link] |

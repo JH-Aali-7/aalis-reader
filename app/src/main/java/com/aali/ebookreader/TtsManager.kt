@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.widget.Toast
 import java.util.Locale
 
 /**
@@ -36,12 +37,63 @@ class TtsManager(context: Context) {
     var speaking = false
         private set
 
+    // the voice follows the language of each passage: Urdu text is read in
+    // an Urdu voice when the phone has one, everything else in English
+    private var currentLocale: Locale? = null
+    private var urduChecked = false
+    private var urduLocale: Locale? = null
+    private var warnedNoUrdu = false
+
+    private fun findUrduLocale(t: TextToSpeech): Locale? {
+        if (urduChecked) return urduLocale
+        urduChecked = true
+        for (l in listOf(Locale("ur", "PK"), Locale("ur", "IN"), Locale("ur"))) {
+            val r = try {
+                t.isLanguageAvailable(l)
+            } catch (e: Exception) {
+                TextToSpeech.LANG_NOT_SUPPORTED
+            }
+            if (r >= TextToSpeech.LANG_AVAILABLE) {
+                urduLocale = l
+                break
+            }
+        }
+        return urduLocale
+    }
+
+    private fun voiceFor(t: TextToSpeech, text: String) {
+        val wantUrdu = Prefs.urduVoice(appContext) && UrduText.isUrdu(text)
+        var target = Locale.US
+        if (wantUrdu) {
+            val ur = findUrduLocale(t)
+            if (ur != null) target = ur
+            else if (!warnedNoUrdu) {
+                warnedNoUrdu = true
+                main.post {
+                    Toast.makeText(
+                        appContext,
+                        "This phone has no Urdu voice yet. Settings → Urdu → Get the Urdu voice",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+        if (target != currentLocale) {
+            try {
+                t.language = target
+            } catch (_: Exception) {
+            }
+            currentLocale = target
+        }
+    }
+
     init {
         tts = TextToSpeech(appContext) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 ready = true
                 try {
                     tts?.language = Locale.US
+                    currentLocale = Locale.US
                 } catch (_: Exception) {
                 }
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
@@ -91,6 +143,7 @@ class TtsManager(context: Context) {
                 t.setPitch(Prefs.ttsPitch(appContext))
                 for (i in startIndex until texts.size) {
                     val chunk = texts[i].take(3900) // TTS input length safety
+                    voiceFor(t, chunk)
                     t.speak(chunk, TextToSpeech.QUEUE_ADD, null, "blk-$i")
                 }
             }
@@ -104,6 +157,7 @@ class TtsManager(context: Context) {
             if (t != null) {
                 t.setSpeechRate(Prefs.ttsRate(appContext))
                 t.setPitch(Prefs.ttsPitch(appContext))
+                voiceFor(t, text)
                 t.speak(text.take(3900), TextToSpeech.QUEUE_FLUSH, null, "one-0")
             }
         }

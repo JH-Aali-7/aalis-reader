@@ -243,6 +243,29 @@ object DictionaryHelper {
         "alumni" to "alumnus", "cacti" to "cactus", "syllabi" to "syllabus"
     )
 
+    /**
+     * A one line meaning for word lists and saved files. Urdu words get their
+     * English meaning; English words get their Urdu meaning added when known.
+     */
+    fun shortMeaning(context: Context, word: String): String {
+        if (UrduText.isUrdu(word)) {
+            val e = UrduDictionary.lookup(context, word) ?: return ""
+            return listOfNotNull(e.english.firstOrNull(), e.urdu.firstOrNull()).joinToString("  ·  ")
+        }
+        val e = lookup(context, word).firstOrNull()
+        val en = e?.let {
+            val p = posLabel(it.pos)
+            (if (p.isEmpty()) "" else "$p: ") +
+                (it.defs.lineSequence().firstOrNull()?.removePrefix("1. ") ?: "")
+        } ?: ""
+        val ur = if (Prefs.urduMeanings(context)) {
+            UrduDictionary.englishToUrdu(context, listOfNotNull(e?.word, clean(word)))
+                .firstOrNull()?.text ?: ""
+        } else ""
+        return listOf(en, if (ur.isEmpty()) "" else "اردو: $ur")
+            .filter { it.isNotBlank() }.joinToString("  ·  ")
+    }
+
     fun posLabel(pos: String): String = when (pos) {
         "n" -> "noun"
         "v" -> "verb"

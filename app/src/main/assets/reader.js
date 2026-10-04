@@ -8,6 +8,18 @@
 
     var paras = [];
 
+    function isUrduText(t) {
+        var letters = 0, ar = 0;
+        for (var i = 0; i < t.length && letters < 400; i++) {
+            var c = t.charCodeAt(i);
+            var isAr = (c >= 0x0600 && c <= 0x06FF) || (c >= 0x0750 && c <= 0x077F) ||
+                (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFF);
+            if (isAr) { ar++; letters++; }
+            else if (/[A-Za-z]/.test(t[i])) letters++;
+        }
+        return letters > 0 && ar * 2 >= letters;
+    }
+
     function collectParagraphs() {
         paras = [];
         var blocks = document.body.querySelectorAll(
@@ -20,6 +32,11 @@
             var raw = el.textContent || '';
             if (raw.replace(/\s+/g, '').length < 2) continue;
             el.setAttribute('data-para', String(idx));
+            // Urdu paragraphs: right to left, Nastaliq typeface, taller lines
+            if (isUrduText(raw)) {
+                el.classList.add('ur-para');
+                if (!el.getAttribute('dir')) el.setAttribute('dir', 'rtl');
+            }
             // kept raw so character offsets from the speech engine match exactly
             paras.push(raw);
             idx++;
@@ -188,7 +205,11 @@
         var textNode = range.startContainer;
         var text = textNode.textContent;
         var off = range.startOffset;
-        var isW = function (ch) { return /[A-Za-zÀ-ɏ'’\-]/.test(ch); };
+        // Latin letters, and Urdu/Arabic letters including their vowel marks
+        // and the zero width non-joiner Urdu typing uses inside words
+        var isW = function (ch) {
+            return /[A-Za-zÀ-ɏ'’\-\u0610-\u061A\u0620-\u065F\u066E-\u06D3\u06D5-\u06EF\u06FA-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFC\u200C]/.test(ch);
+        };
         if (off >= text.length || !isW(text[off])) {
             if (off > 0 && isW(text[off - 1])) off = off - 1; else return null;
         }

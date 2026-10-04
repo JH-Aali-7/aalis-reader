@@ -54,13 +54,15 @@ object OnlineDictionary {
         .trim()
 
     /** Wiktionary definitions, grouped by part of speech. */
-    fun wiktionary(word: String): OnlineResult? {
+    fun wiktionary(word: String, lang: String = "en"): OnlineResult? {
+        // English Wiktionary explains words of every language in English;
+        // its answer is grouped by language code, so an Urdu word is under "ur"
         val body = get(
             "https://en.wiktionary.org/api/rest_v1/page/definition/${enc(word)}"
         ) ?: return null
         return try {
             val root = gson.fromJson(body, JsonObject::class.java)
-            val en = root.getAsJsonArray("en") ?: return null
+            val en = root.getAsJsonArray(lang) ?: return null
             val sb = StringBuilder()
             var count = 0
             for (block in en) {
@@ -93,7 +95,11 @@ object OnlineDictionary {
     }
 
     /** Wikipedia summary, which covers modern scientific vocabulary well. */
-    fun wikipedia(word: String): OnlineResult? {
+    fun wikipedia(word: String, lang: String = "en"): OnlineResult? {
+        if (lang == "ur") {
+            // Urdu Wikipedia first, written in Urdu; English Wikipedia as a fallback
+            summary(word, "ur")?.let { return it }
+        }
         val direct = summary(word)
         if (direct != null) return direct
         // fall back to a search when the exact title does not exist
@@ -111,9 +117,9 @@ object OnlineDictionary {
         }
     }
 
-    private fun summary(title: String): OnlineResult? {
+    private fun summary(title: String, lang: String = "en"): OnlineResult? {
         val body = get(
-            "https://en.wikipedia.org/api/rest_v1/page/summary/${enc(title)}"
+            "https://$lang.wikipedia.org/api/rest_v1/page/summary/${enc(title)}"
         ) ?: return null
         return try {
             val o = gson.fromJson(body, JsonObject::class.java)
@@ -121,7 +127,7 @@ object OnlineDictionary {
             val extract = o.get("extract")?.asString?.trim() ?: return null
             if (extract.length < 20) return null
             val name = o.get("title")?.asString ?: title
-            OnlineResult("Wikipedia", "$name\n\n$extract")
+            OnlineResult(if (lang == "ur") "ویکیپیڈیا  ·  Urdu Wikipedia" else "Wikipedia", "$name\n\n$extract")
         } catch (e: Exception) {
             null
         }
@@ -132,9 +138,16 @@ object OnlineDictionary {
         val key = Prefs.apiKey(context)
         if (key.isEmpty()) return null
         return try {
+            val urdu = UrduText.isUrdu(word)
             val prompt = buildString {
                 append("Explain the word or term \"").append(word)
                 append("\" for a science student, in 2 or 3 short sentences.")
+                if (urdu) {
+                    append(" The word is Urdu: give its English meaning first, then a short ")
+                    append("explanation in simple Urdu.")
+                } else if (Prefs.urduMeanings(context)) {
+                    append(" End with its Urdu meaning on its own line, starting with \"اردو:\".")
+                }
                 if (sentence.isNotBlank()) {
                     append(" Explain what it means in this passage:\n\n\"")
                     append(sentence.take(600)).append("\"")

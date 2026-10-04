@@ -86,6 +86,7 @@ class AiSummaryActivity : AppCompatActivity() {
             }
         }
         DictionaryHelper.warmUp(this)
+        UrduDictionary.warmUp(this)
     }
 
     // ------------------------------------------------ rendering

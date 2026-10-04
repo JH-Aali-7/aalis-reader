@@ -400,7 +400,7 @@ object EpubParser {
                 parts.add(cur)
                 cur = StringBuilder()
             }
-            cur.append("<p>").append(escapeHtml(p).replace("\n", "<br/>")).append("</p>\n")
+            cur.append("<p dir=\"auto\">").append(escapeHtml(p).replace("\n", "<br/>")).append("</p>\n")
         }
         if (cur.isNotEmpty()) parts.add(cur)
         if (parts.isEmpty()) parts.add(StringBuilder("<p>(empty file)</p>"))
@@ -424,7 +424,19 @@ object EpubParser {
                     String(bytes, Charsets.UTF_16LE)
                 bytes.size >= 2 && bytes[0] == 0xFE.toByte() && bytes[1] == 0xFF.toByte() ->
                     String(bytes, Charsets.UTF_16BE)
-                else -> String(bytes, Charsets.UTF_8)
+                else -> {
+                    val utf8 = String(bytes, Charsets.UTF_8)
+                    // older Urdu text files are often saved in the Windows Arabic
+                    // code page; broken UTF-8 gives that away
+                    val bad = utf8.count { it == '�' }
+                    if (bad > 8 && bad * 100 > utf8.length) {
+                        try {
+                            String(bytes, charset("windows-1256"))
+                        } catch (e: Exception) {
+                            utf8
+                        }
+                    } else utf8
+                }
             }
         } catch (e: Exception) {
             String(bytes)

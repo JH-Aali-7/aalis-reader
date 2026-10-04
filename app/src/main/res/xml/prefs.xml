@@ -36,6 +36,23 @@
             app:showSeekBarValue="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Urdu  ·  اردو">
+        <SwitchPreferenceCompat
+            android:key="urdu_meanings"
+            android:title="Urdu meaning for English words"
+            android:summary="Shows the اردو meaning under the English definition, from the offline Urdu dictionary"
+            android:defaultValue="true" />
+        <SwitchPreferenceCompat
+            android:key="urdu_voice"
+            android:title="Read Urdu in an Urdu voice"
+            android:summary="Switches the voice for Urdu passages. Needs the Urdu voice from Google Text-to-speech (download it once for offline use)"
+            android:defaultValue="true" />
+        <Preference
+            android:key="urdu_voice_install"
+            android:title="Get the Urdu voice"
+            android:summary="Opens the text-to-speech voice downloads on your phone" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Auto scroll">
         <SeekBarPreference
             android:key="auto_wpm"

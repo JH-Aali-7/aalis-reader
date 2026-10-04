@@ -11,8 +11,8 @@ android {
         applicationId "com.aali.ebookreader"
         minSdk 24
         targetSdk 34
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "1.9"
     }
 
     // The offline OCR engine ships native code for four processor types.
@@ -66,4 +66,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     // Offline OCR for scanned PDF pages (model bundled, no internet needed)
     implementation 'com.google.mlkit:text-recognition:16.0.1'
+    // Offline Urdu OCR: Tesseract 5 for Android (JitPack), multi-threaded build
+    implementation 'cz.adaptech.tesseract4android:tesseract4android-openmp:4.9.0'
+
+    testImplementation 'junit:junit:4.13.2'
 }

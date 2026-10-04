@@ -42,6 +42,27 @@ class SettingsActivity : AppCompatActivity() {
                 true
             }
 
+            findPreference<Preference>("urdu_voice_install")?.setOnPreferenceClickListener {
+                val ctx = requireContext()
+                try {
+                    // the phone's own screen for downloading text-to-speech voices
+                    startActivity(
+                        android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
+                    )
+                } catch (e: Exception) {
+                    try {
+                        startActivity(android.content.Intent("com.android.settings.TTS_SETTINGS"))
+                    } catch (e2: Exception) {
+                        Toast.makeText(
+                            ctx,
+                            "Open Settings → Accessibility → Text-to-speech, then download the Urdu voice",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                true
+            }
+
             findPreference<Preference>("open_stats")?.setOnPreferenceClickListener {
                 startActivity(android.content.Intent(requireContext(), StatsActivity::class.java))
                 true

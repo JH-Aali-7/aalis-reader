@@ -1,3 +1,10 @@
+/* Urdu: the bundled Noto Nastaliq Urdu face, used only for Urdu letters
+   (unicode-range), so English text keeps the reader's chosen font. */
+@font-face {
+    font-family: 'AaliUrdu';
+    src: url('file:///android_asset/fonts/NotoNastaliqUrdu.ttf') format('truetype');
+    unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
+}
 /* Injected reading styles. Theme and typography values come from Kotlin. */
 html {
     -webkit-tap-highlight-color: rgba(124, 58, 237, 0.12);
@@ -8,7 +15,7 @@ html {
 body:not(.fixed-layout) {
     margin: 0 !important;
     padding: 18px var(--reader-margin, 20px) 140px var(--reader-margin, 20px) !important;
-    font-family: var(--reader-font, Georgia, serif) !important;
+    font-family: 'AaliUrdu', var(--reader-font, Georgia, serif) !important;
     font-size: var(--reader-size, 20px) !important;
     line-height: var(--reader-line, 1.6) !important;
     background: var(--reader-bg, #F4ECD8) !important;
@@ -97,4 +104,12 @@ body.theme-dark .tts-word-box {
 @keyframes readerflash {
     0%   { background: rgba(245, 158, 11, 0.65); }
     100% { background: transparent; }
+}
+
+/* Urdu paragraphs read right to left, with room for Nastaliq's tall letters */
+body:not(.fixed-layout) .ur-para {
+    direction: rtl;
+    text-align: right !important;
+    line-height: 2.15 !important;
+    font-size: 1.08em !important;
 }
